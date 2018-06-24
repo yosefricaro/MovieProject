@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:title="Sort By"
+        android:key="@string/sort_value"
+        android:defaultValue="@string/popular"
+        android:entryValues="@array/sort_value"
+        android:entries="@array/sort_option"/>
+    <ListPreference
+        android:title="Year"
+        android:key="@string/year_value"
+        android:defaultValue="@string/y2016"
+        android:entryValues="@array/year_value"
+        android:entries="@array/year_option"/>
+</PreferenceScreen>
