@@ -1,6 +1,5 @@
 package com.example.android.movieproject.View;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,6 +39,9 @@ import rx.subscriptions.CompositeSubscription;
 public class MainActivity extends AppCompatActivity {
     private Subscription subscriber = new CompositeSubscription();
     String ubahQuery;
+    int count = 0;
+    boolean check = false;
+    boolean check2 = false;
 
     public void tempQuery(String temp){
         ubahQuery = temp;
@@ -118,22 +120,14 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setView(container);
 
             // Set up the buttons
-            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String temp = input.getText().toString();
-                    tempQuery(temp);
-                    if(!temp.isEmpty()) {
-                        getAllItemList();
-                    }
+            alertDialog.setPositiveButton("OK", (dialog, which) -> {
+                String temp = input.getText().toString();
+                tempQuery(temp);
+                if(!temp.isEmpty()) {
+                    getAllItemList();
                 }
             });
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+            alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             alertDialog.create().show();
         }
         return super.onOptionsItemSelected(item);
@@ -201,31 +195,63 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         else {
-            int count = 0;
+//            DBHelper dbHelper = new DBHelper(getBaseContext());
+//
+//            dbHelper.insertRating("2010", 0);
+//            dbHelper.insertRating("2011", 0);
+//            dbHelper.insertRating("2012", 0);
+//            dbHelper.insertRating("2013", 0);
+//            dbHelper.insertRating("2014", 0);
+//            dbHelper.insertRating("2015", 0);
+//            dbHelper.insertRating("2016", 0);
+//            dbHelper.insertRating("2017", 0);
+//            dbHelper.insertRating("2018", 0);
+//
+//            Cursor cursor = dbHelper.getRating(ubahYear);
+//            count = cursor.getColumnIndexOrThrow("vote");
+
             switch (ubahYear){
-                case "2018":count=550;break;
-                case "2017":count=4100;break;
-                case "2016":count=3900;break;
-                case "2015":count=4000;break;
-                case "2014":count=5700;break;
-                case "2013":count=4750;break;
-                case "2012":count=3650;break;
-                case "2011":count=3150;break;
-                case "2010":count=2950;break;
+                case "2018":count=1150;break;
+                case "2017":count=4600;break;
+                case "2016":count=4100;break;
+                case "2015":count=4150;break;
+                case "2014":count=5950;break;
+                case "2013":count=5000;break;
+                case "2012":count=3850;break;
+                case "2011":count=3300;break;
+                case "2010":count=3150;break;
             }
 
-            movieTemp.getMovieR(ubahSort, ubahYear, count).enqueue(new Callback<Result>() {
-                @Override
-                public void onResponse(Call<Result> call, Response<Result> response) {
-                    getResponse(response.body(), recyclerView, allItems, mLoading);
-                }
+//            while (!check2) {
+                movieTemp.getMovieR(ubahSort, ubahYear, count).enqueue(new Callback<Result>() {
+                    @Override
+                    public void onResponse(Call<Result> call, Response<Result> response) {
+//                        if (response.body().getResults().size() == 20) {
+//                            check2 = true;
+//                            dbHelper.updateRating(ubahYear, count);
+//                            getResponse(response.body(), recyclerView, allItems, mLoading);
+//
+//                        } else if (response.body().getResults().size() < 20) {
+//                            count -= 50;
+//                            check = true;
+//                        } else {
+//                            if (!check) {
+//                                count += 50;
+//                            } else {
+//                                check2 = true;
+//                                dbHelper.updateRating(ubahYear, count);
+                                getResponse(response.body(), recyclerView, allItems, mLoading);
+//                            }
+//                        }
+                    }
 
-                @Override
-                public void onFailure(Call<Result> call, Throwable t) {
-                    mLoading.setVisibility(View.INVISIBLE);
-                    Toast.makeText(MainActivity.this, "Tidak ada internet", Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<Result> call, Throwable t) {
+                        mLoading.setVisibility(View.INVISIBLE);
+                        Toast.makeText(MainActivity.this, "Tidak ada internet", Toast.LENGTH_SHORT).show();
+                    }
+                });
+//            }
         }
 
         RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(MainActivity.this, allItems);
